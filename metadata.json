@@ -1,0 +1,7 @@
+{
+  "name": "Deals of the Day",
+  "description": "Editorial product recommendation and deals platform for technology and everyday products in India.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+    // Helper function to check if the user is an authorized admin
+    function isAdmin() {
+      return request.auth != null && 
+             exists(/databases/$(database)/documents/admins/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == true;
+    }
+
+    // Public read access for published/active products, categories, guides, and settings
+    match /products/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /categories/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /buyingGuides/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /siteSettings/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /admins/{uid} {
+      // Admins can read the admin list (useful for the UI to verify own role)
+      allow read: if request.auth != null && request.auth.uid == uid;
+      // Only manual modification via Firebase Console or SuperAdmin (if implemented later)
+      allow write: if false;
+    }
+  }
+}
