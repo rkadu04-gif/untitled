@@ -3,8 +3,10 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig } from 'vite';
 
-export default defineConfig(() => {
+export default defineConfig(({ command }) => {
   return {
+    // Uses the root path for local development, and your repository subfolder for production deployment
+    base: command === 'serve' ? '/' : '/untitled/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
